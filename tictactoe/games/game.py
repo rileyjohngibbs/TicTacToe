@@ -4,6 +4,7 @@ from .base import BaseGame
 
 
 class Game(BaseGame):
+    NAME = "Classic Tic-Tac-Toe"
     SIZE = 3
     VICTORY_PATHS: tuple[VictoryPath, ...] = (
         # Horizontal

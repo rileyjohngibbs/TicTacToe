@@ -8,6 +8,8 @@ from .base import Player
 
 
 class PeekAheadAI(Player):
+    NAME = "The Peek Ahead AI Agent"
+
     def get_move(self, game: BaseGame) -> tuple[int, int]:
         options = game.open_squares()
         own_mark = game.next_mark()
@@ -32,6 +34,3 @@ class PeekAheadAI(Player):
             return f"{self} doesn't have much to think about."
         else:
             return f"{self} considers their options."
-
-    def __str__(self):
-        return "The Peek Ahead AI Agent"

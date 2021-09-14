@@ -30,6 +30,7 @@ DIAGONAL_PATHS: tuple[VictoryPath, ...] = (
 
 
 class Supergame(BaseGame):
+    NAME = "Super Tic-Tac-Toe"
     SIZE = SUPERGAME_SIZE
     VICTORY_PATHS: tuple[VictoryPath, ...] = (
         CORNER_PATHS + SQUARE_PATHS + ROW_PATHS + COLUMN_PATHS + DIAGONAL_PATHS

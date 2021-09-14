@@ -6,6 +6,8 @@ from .base import Player
 
 
 class RandomAI(Player):
+    NAME = "The Random AI Agent"
+
     def get_move(self, game: BaseGame) -> tuple[int, int]:
         options = game.open_squares()
         move = choice(list(options))
@@ -15,6 +17,3 @@ class RandomAI(Player):
 
     def mood(self, game: BaseGame) -> str:
         return f"{self} is feeling impulsive."
-
-    def __str__(self):
-        return "The Random AI Agent"

@@ -18,18 +18,21 @@ class BaseGame(ABC):
         ...
 
     @property
-    def board(self) -> list[list[Mark]]:
-        return self._board
+    @abstractmethod
+    def NAME(self) -> str:
+        ...
 
     @abstractmethod
     def winner(self) -> Mark:
         ...
 
+    board: list[list[Mark]]
+
     def __init__(self, starting_board: Optional[list[list[Mark]]] = None):
         if starting_board:
-            self._board = starting_board
+            self.board = starting_board
         else:
-            self._board = [
+            self.board = [
                 [Mark.NOBODY for _ in range(self.SIZE)] for _ in range(self.SIZE)
             ]
 

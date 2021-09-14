@@ -4,6 +4,8 @@ from .base import Player
 
 
 class Human(Player):
+    NAME = "The Human"
+
     def get_move(self, game: BaseGame) -> tuple[int, int]:
         self.speaker("Where do you go?\nRow: ")
 
@@ -31,6 +33,3 @@ class Human(Player):
 
     def mood(self, game: BaseGame) -> str:
         return "It's your turn."
-
-    def __str__(self):
-        return "The Human"

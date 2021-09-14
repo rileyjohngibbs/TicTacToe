@@ -19,3 +19,11 @@ class Player(ABC):
     @abstractmethod
     def mood(self, game: BaseGame) -> str:
         ...
+
+    @property
+    @abstractmethod
+    def NAME(self) -> str:
+        ...
+
+    def __str__(self):
+        return self.NAME

@@ -11,6 +11,7 @@ from tictactoe.constants import Address, Mark
 
 
 class FlawlessAI(Player):
+    NAME = "The Flawless AI Agent"
     TIME_CUTOFF = 3
 
     def get_move(self, game: BaseGame) -> tuple[int, int]:
@@ -122,6 +123,3 @@ class FlawlessAI(Player):
         else:
             score = x_count ** 2 - o_count ** 2
         return score
-
-    def __str__(self) -> str:
-        return "The Flawless AI Agent"
