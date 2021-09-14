@@ -1,17 +1,18 @@
 from curses import wrapper
-from typing import Dict
 
-from constants import Mark, SquareFilled
-from game import Game
-from supergame import Supergame
-from players import FlawlessAI, Human, PeekAheadAI, Player, RandomAI
+from tictactoe.constants import Mark, SquareFilled
+from tictactoe.games import Game, Supergame
+from tictactoe.players import FlawlessAI, Human, PeekAheadAI, Player, RandomAI
 
 
 def main(stdscr):
     game = Supergame()
     players = {
         Mark.X: Human(speaker=stdscr.addstr, listener=stdscr.getkey),
-        Mark.O: FlawlessAI(speaker=lambda m: stdscr.addstr(m) or stdscr.refresh(), listener=stdscr.getkey),
+        Mark.O: FlawlessAI(
+            speaker=lambda m: stdscr.addstr(m) or stdscr.refresh(),
+            listener=stdscr.getkey,
+        ),
     }
     next_mark = game.next_mark()
     winner = game.winner()
@@ -41,10 +42,11 @@ def main(stdscr):
     stdscr.getkey()
 
 
-def display_game(game: Game, players: Dict[Mark, Player]) -> str:
+def display_game(game: Game, players: dict[Mark, Player]) -> str:
     header = f"X: {players[Mark.X]}\nO: {players[Mark.O]}"
-    board = f"\n{'+'.join('-' for _ in range(game.SIZE))}\n".join("|".join(str(square) for square in row)
-                             for row in game.board)
+    board = f"\n{'+'.join('-' for _ in range(game.SIZE))}\n".join(
+        "|".join(str(square) for square in row) for row in game.board
+    )
     return f"{header}\n\n{board}\n"
 
 
