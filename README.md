@@ -24,12 +24,5 @@ Super Tic-Tac-Toe works like Tic-Tac-Toe with the following differences:
 - Three squares in a row is not a victory; the player must have four squares.
 - A player may also win by capturing all four corner squares of the board.
 - A player may also win by capturing four adjacent squares forming a larger square. For example, this is a win for `X`:
-```
- |X|O|
--+-+-+-
- |X|X|
--+-+-+-
-O|X|X|O
--+-+-+-
- |O| |
-```
+
+    <img src="https://user-images.githubusercontent.com/5668445/133481670-d31ad93d-c017-4605-a312-f5a1314fa6fc.png" width=75 />
