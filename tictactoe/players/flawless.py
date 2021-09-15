@@ -94,11 +94,16 @@ class FlawlessAI(Player):
                 return 0
 
         next_moves = hypothetical_game.open_squares()
+        if not next_moves:  # Tie game
+            return 0.5
+
         minimized_score = 2.0
         for next_move in next_moves:
             score = -self.score_move(hypothetical_game, next_move, depth - 1)
             if score < minimized_score or score == minimized_score and choice([0, 1]):
                 minimized_score = score
+                if minimized_score == -1:
+                    break
         return minimized_score
 
     def score_game_state(self, game: BaseGame) -> float:
