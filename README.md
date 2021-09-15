@@ -15,3 +15,21 @@ Download or clone this repo. Navigate in a shell to the repo's root directory an
 ```bash
 python3.9 -m tictactoe
 ```
+
+## Rules of Super Tic-Tac-Toe
+
+Super Tic-Tac-Toe works like Tic-Tac-Toe with the following differences:
+
+- The board is four squares on a side instead of three.
+- Three squares in a row is not a victory; the player must have four squares.
+- A player may also win by capturing all four corner squares of the board.
+- A player may also win by capturing four adjacent squares forming a larger square. For example, this is a win for `X`:
+```
+ |X|O|
+-+-+-+-
+ |X|X|
+-+-+-+-
+O|X|X|O
+-+-+-+-
+ |O| |
+```
