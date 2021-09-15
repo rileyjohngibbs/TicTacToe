@@ -1,5 +1,6 @@
 from copy import deepcopy
 from random import choice
+from typing import Tuple
 
 from tictactoe.games import BaseGame
 from tictactoe.constants import Mark
@@ -10,7 +11,7 @@ from .base import Player
 class PeekAheadAI(Player):
     NAME = "The Peek Ahead AI Agent"
 
-    def get_move(self, game: BaseGame) -> tuple[int, int]:
+    def get_move(self, game: BaseGame) -> Tuple[int, int]:
         options = game.open_squares()
         own_mark = game.next_mark()
         opponent_mark = Mark.X if own_mark is Mark.O else Mark.O

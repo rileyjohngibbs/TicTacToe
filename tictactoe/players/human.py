@@ -1,3 +1,5 @@
+from typing import Set, Tuple
+
 from tictactoe.games import BaseGame
 
 from .base import Player
@@ -6,7 +8,7 @@ from .base import Player
 class Human(Player):
     NAME = "The Human"
 
-    def get_move(self, game: BaseGame) -> tuple[int, int]:
+    def get_move(self, game: BaseGame) -> Tuple[int, int]:
         self.speaker("Where do you go?\nRow: ")
 
         valid_keys = self.valid_index_keys(game)
@@ -28,7 +30,7 @@ class Human(Player):
         self.listener()
         return row, col
 
-    def valid_index_keys(self, game: BaseGame) -> set[str]:
+    def valid_index_keys(self, game: BaseGame) -> Set[str]:
         return {str(n) for n in range(game.SIZE)}
 
     def mood(self, game: BaseGame) -> str:

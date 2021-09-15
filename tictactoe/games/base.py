@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from copy import deepcopy
 from itertools import product
-from typing import Optional
+from typing import Dict, List, Optional, Set, Tuple
 
 from tictactoe.constants import Mark, SquareFilled, Address, VictoryPath
 
@@ -14,7 +14,7 @@ class BaseGame(ABC):
 
     @property
     @abstractmethod
-    def VICTORY_PATHS(self) -> tuple[VictoryPath, ...]:
+    def VICTORY_PATHS(self) -> Tuple[VictoryPath, ...]:
         ...
 
     @property
@@ -26,9 +26,9 @@ class BaseGame(ABC):
     def winner(self) -> Mark:
         ...
 
-    board: list[list[Mark]]
+    board: List[List[Mark]]
 
-    def __init__(self, starting_board: Optional[list[list[Mark]]] = None):
+    def __init__(self, starting_board: Optional[List[List[Mark]]] = None):
         if starting_board:
             self.board = starting_board
         else:
@@ -36,13 +36,13 @@ class BaseGame(ABC):
                 [Mark.NOBODY for _ in range(self.SIZE)] for _ in range(self.SIZE)
             ]
 
-    def get_board(self) -> list[list[Mark]]:
+    def get_board(self) -> List[List[Mark]]:
         return deepcopy(self.board)
 
     def get_square_mark(self, row: int, column: int) -> Mark:
         return self.board[row][column]
 
-    def open_squares(self) -> set[Address]:
+    def open_squares(self) -> Set[Address]:
         return self.get_squares_by_mark()[Mark.NOBODY]
 
     def next_mark(self) -> Mark:
@@ -64,9 +64,9 @@ class BaseGame(ABC):
             mark = self.next_mark()
         self.board[row][col] = mark
 
-    def get_squares_by_mark(self) -> dict[Mark, set[Address]]:
+    def get_squares_by_mark(self) -> Dict[Mark, Set[Address]]:
         addresses = product(range(self.SIZE), range(self.SIZE))
-        squares_by_mark: dict[Mark, set[Address]] = {m: set() for m in Mark}
+        squares_by_mark: Dict[Mark, Set[Address]] = {m: set() for m in Mark}
         for address in addresses:
             mark = self.get_square_mark(*address)
             squares_by_mark[mark].add(address)

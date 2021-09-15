@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from tictactoe.constants import Mark, VictoryPath
 
 from .base import BaseGame
@@ -6,7 +8,7 @@ from .base import BaseGame
 class Game(BaseGame):
     NAME = "Classic Tic-Tac-Toe"
     SIZE = 3
-    VICTORY_PATHS: tuple[VictoryPath, ...] = (
+    VICTORY_PATHS: Tuple[VictoryPath, ...] = (
         # Horizontal
         {(0, 0), (0, 1), (0, 2)},
         {(1, 0), (1, 1), (1, 2)},

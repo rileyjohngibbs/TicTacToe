@@ -1,4 +1,5 @@
 from curses import wrapper
+from typing import Dict, Type
 
 from tictactoe.constants import Mark, SquareFilled
 from tictactoe.games import BaseGame, Game, Supergame
@@ -43,7 +44,7 @@ def main(stdscr):
     stdscr.getkey()
 
 
-def ask_game_type(stdscr) -> type[BaseGame]:
+def ask_game_type(stdscr) -> Type[BaseGame]:
     game_choices = [Game, Supergame]
     stdscr.addstr("What kind of game do you want to play?\n")
     for i, game in enumerate(game_choices):
@@ -54,7 +55,7 @@ def ask_game_type(stdscr) -> type[BaseGame]:
     return game_choices[int(answer)]
 
 
-def ask_player_type(stdscr, player_name: str) -> type[Player]:
+def ask_player_type(stdscr, player_name: str) -> Type[Player]:
     player_choices = [Human, RandomAI, PeekAheadAI, FlawlessAI]
     stdscr.addstr(f"Who will be {player_name}?\n")
     for i, player in enumerate(player_choices):
@@ -65,7 +66,7 @@ def ask_player_type(stdscr, player_name: str) -> type[Player]:
     return player_choices[int(answer)]
 
 
-def display_game(game: Game, players: dict[Mark, Player]) -> str:
+def display_game(game: Game, players: Dict[Mark, Player]) -> str:
     header = f"X: {players[Mark.X]}\nO: {players[Mark.O]}"
     board = f"\n{'+'.join('-' for _ in range(game.SIZE))}\n".join(
         "|".join(str(square) for square in row) for row in game.board

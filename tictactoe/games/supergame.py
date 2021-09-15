@@ -1,11 +1,12 @@
 from itertools import product
+from typing import Tuple
 
 from tictactoe.constants import Mark, VictoryPath
 
 from .base import BaseGame
 
 SUPERGAME_SIZE = 4  # Was getting a NameError before so /shrug
-CORNER_PATHS: tuple[VictoryPath, ...] = (
+CORNER_PATHS: Tuple[VictoryPath, ...] = (
     {
         (0, 0),
         (0, SUPERGAME_SIZE - 1),
@@ -13,17 +14,17 @@ CORNER_PATHS: tuple[VictoryPath, ...] = (
         (SUPERGAME_SIZE - 1, SUPERGAME_SIZE - 1),
     },
 )
-SQUARE_PATHS: tuple[VictoryPath, ...] = tuple(
+SQUARE_PATHS: Tuple[VictoryPath, ...] = tuple(
     {(x, y), (x + 1, y), (x, y + 1), (x + 1, y + 1)}
     for x, y in product(range(SUPERGAME_SIZE - 1), range(SUPERGAME_SIZE - 1))
 )
-ROW_PATHS: tuple[VictoryPath, ...] = tuple(
+ROW_PATHS: Tuple[VictoryPath, ...] = tuple(
     {(r, c) for c in range(SUPERGAME_SIZE)} for r in range(SUPERGAME_SIZE)
 )
-COLUMN_PATHS: tuple[VictoryPath, ...] = tuple(
+COLUMN_PATHS: Tuple[VictoryPath, ...] = tuple(
     {(r, c) for r in range(SUPERGAME_SIZE)} for c in range(SUPERGAME_SIZE)
 )
-DIAGONAL_PATHS: tuple[VictoryPath, ...] = (
+DIAGONAL_PATHS: Tuple[VictoryPath, ...] = (
     {(r, SUPERGAME_SIZE - r - 1) for r in range(SUPERGAME_SIZE)},
     {(r, r) for r in range(SUPERGAME_SIZE)},
 )
@@ -32,7 +33,7 @@ DIAGONAL_PATHS: tuple[VictoryPath, ...] = (
 class Supergame(BaseGame):
     NAME = "Super Tic-Tac-Toe"
     SIZE = SUPERGAME_SIZE
-    VICTORY_PATHS: tuple[VictoryPath, ...] = (
+    VICTORY_PATHS: Tuple[VictoryPath, ...] = (
         CORNER_PATHS + SQUARE_PATHS + ROW_PATHS + COLUMN_PATHS + DIAGONAL_PATHS
     )
 

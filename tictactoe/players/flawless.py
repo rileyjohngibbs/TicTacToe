@@ -3,7 +3,7 @@ from copy import deepcopy
 import math
 from random import choice
 import time
-from typing import cast
+from typing import Set, Tuple, cast
 
 from tictactoe.players.base import Player
 from tictactoe.games import BaseGame, Game, Supergame
@@ -14,7 +14,7 @@ class FlawlessAI(Player):
     NAME = "The Flawless AI Agent"
     TIME_CUTOFF = 3
 
-    def get_move(self, game: BaseGame) -> tuple[int, int]:
+    def get_move(self, game: BaseGame) -> Tuple[int, int]:
         if self.is_first_move(game):
             if type(game) == Game:
                 move = self.first_move_of_game(cast(Game, game))
@@ -147,7 +147,7 @@ class FlawlessAI(Player):
             path_scores_sum += score
         return 2 / (1 + math.e ** (-path_scores_sum)) - 1
 
-    def score_path(self, game: BaseGame, path: set[Address]) -> int:
+    def score_path(self, game: BaseGame, path: Set[Address]) -> int:
         """As a convention, O is negative and X is positive."""
         marks_counter = Counter(game.get_square_mark(*address) for address in path)
         x_count = marks_counter.get(Mark.X, 0)
