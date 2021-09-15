@@ -20,6 +20,8 @@ class FlawlessAI(Player):
                 move = self.first_move_of_game(cast(Game, game))
             else:
                 move = self.first_move_of_supergame(cast(Supergame, game))
+        elif type(game) == Supergame and self.is_second_move(game):
+            move = self.second_move_of_supergame(cast(Supergame, game))
         else:
             start_time = time.time()
             depth = 0
@@ -42,6 +44,9 @@ class FlawlessAI(Player):
 
     def is_first_move(self, game: BaseGame) -> bool:
         return len(game.open_squares()) >= game.SIZE ** 2 - 1
+
+    def is_second_move(self, game: BaseGame) -> bool:
+        return game.SIZE ** 2 - 3 <= len(game.open_squares()) < game.SIZE ** 2 - 1
 
     def first_move_of_game(self, game: Game) -> Address:
         options = game.open_squares()
@@ -67,6 +72,30 @@ class FlawlessAI(Player):
                     1 + 1 * (marked_square[1] <= 1),
                 )
 
+    def second_move_of_supergame(self, game: Supergame) -> Address:
+        squares_by_mark = game.get_squares_by_mark()
+        if game.next_mark() is Mark.O:
+            if squares_by_mark[Mark.X] == {(1, 1), (1, 2)}:
+                if squares_by_mark[Mark.O] == {(2, 1)}:
+                    move = (1, 3)
+                else:
+                    move = (1, 0)
+            elif squares_by_mark[Mark.X] == {(2, 1), (2, 2)}:
+                if squares_by_mark[Mark.O] == {(1, 1)}:
+                    move = (2, 3)
+                else:
+                    move = (2, 0)
+            else:
+                move = max(squares_by_mark[Mark.NOBODY], key=lambda m: self.score_move(game, m, 2))
+        if game.next_mark() is Mark.X:
+            if squares_by_mark[Mark.O] == {(2, 2)}:
+                move = (1, 0)
+            elif squares_by_mark[Mark.O] & {(1, 2)}:
+                move = (2, 1)
+            else:
+                move = (1, 2)
+        return move
+
     def mood(self, game: BaseGame) -> str:
         if self.is_first_move(game):
             return f"{self} doesn't need to think about their first move."
@@ -76,7 +105,6 @@ class FlawlessAI(Player):
     def score_move(self, game: BaseGame, move: Address, depth: int) -> float:
         hypothetical_game = game.__class__(deepcopy(game.board))
         hypothetical_game.mark_board(*move)
-        sign = -1 if hypothetical_game.get_square_mark(*move) is Mark.O else 1
 
         winner = hypothetical_game.winner()
         if winner is not Mark.NOBODY:
@@ -89,13 +117,14 @@ class FlawlessAI(Player):
                 return score
             elif score < 0:
                 # Favors O, which is good if O just went
+                sign = -1 if hypothetical_game.get_square_mark(*move) is Mark.O else 1
                 return sign * score
             else:
-                return 0
+                return 0.0
 
         next_moves = hypothetical_game.open_squares()
         if not next_moves:  # Tie game
-            return 0.5
+            return 0.0
 
         minimized_score = 2.0
         for next_move in next_moves:
