@@ -22,20 +22,19 @@ class MoveScore:
     def __lt__(self, other: Any) -> bool:
         if type(other) != MoveScore:
             raise TypeError(f"Cannot compare MoveScore to type {type(other)}")
-        if self.score < 0:
-            self_depth = self.depth
-        else:
-            self_depth = -self.depth
-        if cast(MoveScore, other).depth < 0:
-            other_depth = cast(MoveScore, other).depth
-        else:
-            other_depth = -cast(MoveScore, other).depth
-        return (self.score, self.depth) < (other.score, other.depth)
+        return self._comp_tuple() < cast(MoveScore, other)._comp_tuple()
 
     def __eq__(self, other: Any) -> bool:
         if type(other) != MoveScore:
             raise TypeError(f"Cannot compare MoveScore to type {type(other)}")
-        return self.score == cast(MoveScore, other).score and self.depth == cast(MoveScore, other).depth
+        return self._comp_tuple() == cast(MoveScore, other)._comp_tuple()
+
+    def _comp_tuple(self) -> Tuple[float, int]:
+        if self.score < 0:
+            depth = self.depth
+        else:
+            depth = -self.depth
+        return (self.score, depth)
 
     def bump(self) -> "MoveScore":
         return MoveScore(self.score, self.depth + 1)
@@ -64,10 +63,10 @@ class FlawlessAI(Player):
                     if opt_score > best_score:
                         best_score = opt_score
                         move = option
-                    if best_score == 1:
+                    if best_score.score == 1.0:
                         break
                 depth += 1
-                if best_score == 1:
+                if best_score.score == 1.0:
                     break
         self.speaker(f"{self} claims {move}. Press any key.\n")
         self.listener()

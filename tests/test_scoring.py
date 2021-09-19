@@ -142,3 +142,14 @@ def test_score_long_loss_over_short_loss(agent):
     ]
     game = Supergame(board)
     assert agent.score_move(game, (1, 0), 3) > agent.score_move(game, (3, 3), 3)
+
+
+def test_score_short_win_over_long_win(agent):
+    board = [
+        [X, X, _, _],
+        [_, X, _, _],
+        [_, _, _, Q],
+        [Q, Q, _, _],
+    ]
+    game = Supergame(board)
+    assert agent.score_move(game, (1, 0), 3) > agent.score_move(game, (0, 2), 3)
