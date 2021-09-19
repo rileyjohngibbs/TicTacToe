@@ -98,8 +98,8 @@ class FlawlessAI(Player):
                 return (row, column)
             else:
                 return (
-                    1 + 1 * (marked_square[0] <= 1),
-                    1 + 1 * (marked_square[1] <= 1),
+                    1 + 1 * (marked_square[0] > 1),
+                    1 + 1 * (marked_square[1] > 1),
                 )
 
     def second_move_of_supergame(self, game: Supergame) -> Address:
