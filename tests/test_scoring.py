@@ -56,7 +56,7 @@ def test_score_winning_move(agent):
         [_, _, _, _],
     ]
     game = Supergame(board)
-    assert agent.score_move(game, (0, 3), 1) == 1
+    assert agent.score_move(game, (0, 3), 1).score == 1
 
 
 def test_score_miss_block(agent):
@@ -67,7 +67,7 @@ def test_score_miss_block(agent):
         [_, _, _, _],
     ]
     game = Supergame(board)
-    assert agent.score_move(game, (2, 3), 1) == -1
+    assert agent.score_move(game, (2, 3), 1).score == -1
 
 
 def test_score_miss_block_o(agent):
@@ -78,7 +78,7 @@ def test_score_miss_block_o(agent):
         [_, _, _, _],
     ]
     game = Supergame(board)
-    assert agent.score_move(game, (2, 0), 1) == -1
+    assert agent.score_move(game, (2, 0), 1).score == -1
 
 
 def test_score_force_tie(agent):
@@ -89,7 +89,7 @@ def test_score_force_tie(agent):
         [Q, _, X, _],
     ]
     game = Supergame(board)
-    assert agent.score_move(game, (2, 2), 5) == 0
+    assert agent.score_move(game, (2, 2), 5).score == 0
 
 
 @pytest.mark.parametrize("move", [(0, 0), (2, 2)])
@@ -101,7 +101,7 @@ def test_score_bad_second_move(agent, move):
         [_, _, _, _],
     ]
     game = Supergame(board)
-    assert agent.score_move(game, move, 5) == -1
+    assert agent.score_move(game, move, 5).score == -1
 
 
 @pytest.mark.parametrize("move", [(1, 3)])
@@ -113,7 +113,7 @@ def test_score_good_second_move(agent, move):
         [_, _, _, _],
     ]
     game = Supergame(board)
-    assert agent.score_move(game, move, 5) > -1
+    assert agent.score_move(game, move, 5).score > -1
 
 
 @pytest.mark.parametrize("center,move", [

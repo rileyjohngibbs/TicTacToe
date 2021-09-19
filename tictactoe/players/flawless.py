@@ -1,13 +1,44 @@
 from collections import Counter
 from copy import deepcopy
+from dataclasses import dataclass
 import math
 from random import choice
 import time
-from typing import Set, Tuple, cast
+from typing import Any, Set, Tuple, cast
 
 from tictactoe.players.base import Player
 from tictactoe.games import BaseGame, Game, Supergame
 from tictactoe.constants import Address, Mark
+
+
+@dataclass
+class MoveScore:
+    score: float
+    depth: int
+
+    def __neg__(self) -> "MoveScore":
+        return MoveScore(-self.score, self.depth)
+
+    def __lt__(self, other: Any) -> bool:
+        if type(other) != MoveScore:
+            raise TypeError(f"Cannot compare MoveScore to type {type(other)}")
+        if self.score < 0:
+            self_depth = self.depth
+        else:
+            self_depth = -self.depth
+        if cast(MoveScore, other).depth < 0:
+            other_depth = cast(MoveScore, other).depth
+        else:
+            other_depth = -cast(MoveScore, other).depth
+        return (self.score, self.depth) < (other.score, other.depth)
+
+    def __eq__(self, other: Any) -> bool:
+        if type(other) != MoveScore:
+            raise TypeError(f"Cannot compare MoveScore to type {type(other)}")
+        return self.score == cast(MoveScore, other).score and self.depth == cast(MoveScore, other).depth
+
+    def bump(self) -> "MoveScore":
+        return MoveScore(self.score, self.depth + 1)
 
 
 class FlawlessAI(Player):
@@ -26,7 +57,7 @@ class FlawlessAI(Player):
             start_time = time.time()
             depth = 0
             while time.time() - start_time < self.TIME_CUTOFF:
-                best_score = -2.0
+                best_score = MoveScore(-2.0, 0)
                 move = (game.SIZE, game.SIZE)
                 for option in game.open_squares():
                     opt_score = self.score_move(game, option, depth)
@@ -102,36 +133,36 @@ class FlawlessAI(Player):
         else:
             return f"{self} considers all possible outcomes before making their move."
 
-    def score_move(self, game: BaseGame, move: Address, depth: int) -> float:
+    def score_move(self, game: BaseGame, move: Address, depth: int) -> MoveScore:
         hypothetical_game = game.__class__(deepcopy(game.board))
         hypothetical_game.mark_board(*move)
 
         winner = hypothetical_game.winner()
         if winner is not Mark.NOBODY:
-            return 1
+            return MoveScore(1, 0)
 
         if depth == 0:
-            score = self.score_game_state(hypothetical_game)
-            if score > 0:
+            state_score = self.score_game_state(hypothetical_game)
+            if state_score > 0:
                 # Favors X, which is good if X just went
-                return score
-            elif score < 0:
+                return MoveScore(state_score, 0)
+            elif state_score < 0:
                 # Favors O, which is good if O just went
                 sign = -1 if hypothetical_game.get_square_mark(*move) is Mark.O else 1
-                return sign * score
+                return MoveScore(sign * state_score, 0)
             else:
-                return 0.0
+                return MoveScore(0.0, 0)
 
         next_moves = hypothetical_game.open_squares()
         if not next_moves:  # Tie game
-            return 0.0
+            return MoveScore(0.0, 0)
 
-        minimized_score = 2.0
+        minimized_score = MoveScore(2.0, 0)
         for next_move in next_moves:
-            score = -self.score_move(hypothetical_game, next_move, depth - 1)
+            score = -self.score_move(hypothetical_game, next_move, depth - 1).bump()
             if score < minimized_score or score == minimized_score and choice([0, 1]):
                 minimized_score = score
-                if minimized_score == -1:
+                if minimized_score.score == -1.0:
                     break
         return minimized_score
 
