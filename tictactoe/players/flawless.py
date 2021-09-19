@@ -1,3 +1,4 @@
+from __future__ import annotations
 from collections import Counter
 from copy import deepcopy
 from dataclasses import dataclass
@@ -9,35 +10,6 @@ from typing import Any, Set, Tuple, cast
 from tictactoe.players.base import Player
 from tictactoe.games import BaseGame, Game, Supergame
 from tictactoe.constants import Address, Mark
-
-
-@dataclass
-class MoveScore:
-    score: float
-    depth: int
-
-    def __neg__(self) -> "MoveScore":
-        return MoveScore(-self.score, self.depth)
-
-    def __lt__(self, other: Any) -> bool:
-        if type(other) != MoveScore:
-            raise TypeError(f"Cannot compare MoveScore to type {type(other)}")
-        return self._comp_tuple() < cast(MoveScore, other)._comp_tuple()
-
-    def __eq__(self, other: Any) -> bool:
-        if type(other) != MoveScore:
-            raise TypeError(f"Cannot compare MoveScore to type {type(other)}")
-        return self._comp_tuple() == cast(MoveScore, other)._comp_tuple()
-
-    def _comp_tuple(self) -> Tuple[float, int]:
-        if self.score < 0:
-            depth = self.depth
-        else:
-            depth = -self.depth
-        return (self.score, depth)
-
-    def bump(self) -> "MoveScore":
-        return MoveScore(self.score, self.depth + 1)
 
 
 class FlawlessAI(Player):
@@ -187,3 +159,32 @@ class FlawlessAI(Player):
         else:
             score = x_count ** 2 - o_count ** 2
         return score
+
+
+@dataclass
+class MoveScore:
+    score: float
+    depth: int
+
+    def __neg__(self) -> MoveScore:
+        return MoveScore(-self.score, self.depth)
+
+    def __lt__(self, other: Any) -> bool:
+        if type(other) != MoveScore:
+            raise TypeError(f"Cannot compare MoveScore to type {type(other)}")
+        return self._comp_tuple() < cast(MoveScore, other)._comp_tuple()
+
+    def __eq__(self, other: Any) -> bool:
+        if type(other) != MoveScore:
+            raise TypeError(f"Cannot compare MoveScore to type {type(other)}")
+        return self._comp_tuple() == cast(MoveScore, other)._comp_tuple()
+
+    def _comp_tuple(self) -> Tuple[float, int]:
+        if self.score < 0:
+            depth = self.depth
+        else:
+            depth = -self.depth
+        return (self.score, depth)
+
+    def bump(self) -> MoveScore:
+        return MoveScore(self.score, self.depth + 1)
